@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <style>
+      div#gameContainer {
+        background: transparent !important;
+        position: absolute;
+      }
+
+      div#gameContainer canvas {
+        position: absolute;
+      }
+
+      div#gameContainer canvas[data-pixel-art="true"] {
+        position: absolute;
+        image-rendering: optimizeSpeed;
+        image-rendering: -webkit-crisp-edges;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: -o-crisp-edges;
+        image-rendering: crisp-edges;
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: optimize-contrast;
+        image-rendering: pixelated;
+        -ms-interpolation-mode: nearest-neighbor;
+      }
+    </style>
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>React App</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script src="v3/V0.3.loader.js"></script>
+    <script>
+      async function loadGame() {
+        var canvas = document.querySelector("#unity-canvas");
+        if (!canvas) {
+          // Sleep for 2 secs
+          await new Promise((resolve) => setTimeout(resolve, 1500));
+          loadGame();
+          return;
+        }
+        var config = {
+          dataUrl: "v3/V0.3.data",
+          frameworkUrl: "v3/V0.3.framework.js",
+          codeUrl: "v3/V0.3.wasm",
+          streamingAssetsUrl: "StreamingAssets",
+          companyName: "quaiboss",
+          productName: "FLAPPY _BOSS",
+          productVersion: "0.3",
+        };
+        var scaleToFit;
+        try {
+          scaleToFit = !!JSON.parse("");
+        } catch (e) {
+          scaleToFit = true;
+        }
+        function progressHandler(progress) {
+          var percent = progress * 100 + "%";
+          canvas.style.background =
+            "linear-gradient(to right, white, white " +
+            percent +
+            ", transparent " +
+            percent +
+            ", transparent) no-repeat center";
+          canvas.style.backgroundSize = "100% 1rem";
+        }
+        function onResize() {
+          var container = canvas.parentElement;
+          var w;
+          var h;
+
+          if (scaleToFit) {
+            // w = window.innerWidth;
+            h = window.innerHeight;
+
+            var r = 720 / 1280;
+
+            if (w * r > window.innerHeight) {
+              // w = Math.min(w, Math.ceil(h / r));
+            }
+            h = Math.floor(w * r);
+          } else {
+            // w = 1280;
+            h = 720;
+          }
+
+          // container.style.width = canvas.style.width = w + "px";
+          container.style.height = canvas.style.height = h + "px";
+          container.style.top = Math.floor((window.innerHeight - h) / 2) + "px";
+          // container.style.left = Math.floor((window.innerWidth - w) / 2) + "px";
+        }
+        createUnityInstance(canvas, config, progressHandler).then(function (
+          instance
+        ) {
+          canvas = instance.Module.canvas;
+          onResize();
+        });
+        window.addEventListener("resize", onResize);
+        onResize();
+
+        if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+          // Mobile device style: fill the whole browser client area with the game canvas:
+          const meta = document.createElement("meta");
+          meta.name = "viewport";
+          meta.content =
+            "width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes";
+          document.getElementsByTagName("head")[0].appendChild(meta);
+        }
+      }
+
+      loadGame();
+    </script>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  </body>
+</html>
