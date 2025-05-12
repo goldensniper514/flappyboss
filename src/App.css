@@ -36,3 +36,42 @@
     transform: rotate(360deg);
   }
 }
+
+/* Login Button Styles */
+.login-button {
+  position: relative;
+  padding: 15px 30px; /* Padding for the button */
+  font-size: 24px; /* Large font size */
+  font-weight: bold; /* Bold text */
+  color: white; /* White text color */
+  text-transform: uppercase; /* Uppercase text */
+  background: linear-gradient(
+    135deg,
+    #ff9f0a,
+    #ff5c00
+  ); /* Orange gradient background */
+  border: 2px solid white; /* White border */
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5); /* Shadow effect */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: transform 0.2s ease-in-out; /* Smooth hover animation */
+  overflow: hidden; /* Ensure the arrow is properly rendered */
+  border-radius: 15px;
+}
+
+/* Create the arrow shape */
+.login-button::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -20px; /* Adjust the position of the arrow */
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 20px 0 20px 20px; /* Adjust the size of the arrow */
+  border-color: transparent transparent transparent #ff9f0a; /* Match the gradient color */
+}
+
+.login-button:hover {
+  transform: scale(1.05); /* Slightly bigger on hover */
+}

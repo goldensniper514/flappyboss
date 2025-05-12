@@ -33,13 +33,13 @@ function App() {
         </div>
         <div style={{ position: "absolute", top: 20, right: 20 }}>
           <button
-            className="App-link"
+            className="login-button"
             onClick={handleConnect}
             style={{ height: "60px", fontSize: 20, padding: 10 }}
           >
-            {account.length > 0
+            {account?.length > 0
               ? `Connected (${shortenAddress(account[0], 5)})`
-              : "Connect Pelagus Wallet"}
+              : "Connect Wallet"}
           </button>
         </div>
       </header>
